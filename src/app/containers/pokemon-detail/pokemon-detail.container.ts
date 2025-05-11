@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { firstValueFrom } from 'rxjs';
 import { Pokemon } from 'types/pokemon.type';
@@ -35,7 +36,8 @@ import { PokemonInfoComponent } from '../../components/pokemon-info/pokemon-info
 })
 export class PokemonDetailContainer {
     private readonly httpClient = inject(HttpClient);
-    private readonly pokemonId = signal('bulbasaur');
+    private readonly route = inject(ActivatedRoute);
+    readonly pokemonId = signal(this.route.snapshot.paramMap.get('pokemonId') ?? 'bulbasaur');
 
     readonly currentPokemonInfo = injectQuery(() => ({
         queryKey: ['pokemon', this.pokemonId()],
@@ -46,5 +48,9 @@ export class PokemonDetailContainer {
 
     constructor() {
         injectTwHostClass(() => 'flex flex-col gap-4 p-5 pt-20');
+        this.route.paramMap.subscribe((params) => {
+            const id = params.get('pokemonId');
+            if (id) this.pokemonId.set(id);
+        });
     }
 }
