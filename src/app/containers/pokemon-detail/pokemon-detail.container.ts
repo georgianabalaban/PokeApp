@@ -30,7 +30,7 @@ import { PokemonInfoComponent } from '../../components/pokemon-info/pokemon-info
         -->
 
         <app-tab-group
-            [tabs]="['abilities', 'stats', 'moves']"
+            [tabs]="[TabType.Abilities, TabType.Stats, TabType.Moves]"
             [selectedTab]="selectedTab"
             (tabChange)="selectTab($event)"
         ></app-tab-group>
@@ -48,7 +48,7 @@ export class PokemonDetailContainer {
     private readonly route = inject(ActivatedRoute);
     readonly pokemonId = signal(this.route.snapshot.paramMap.get('pokemonId') ?? 'bulbasaur');
     private pokedex = new Pokedex();
-
+    TabType = TabType;
     abilities: any[] = [];
     stats: any[] = [];
     moves: any[] = [];
